@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="zentraFaviconGrad" x1="14" y1="14" x2="86" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+
+  <rect width="100" height="100" rx="22" fill="#0B1020" />
+
+  <g transform="translate(14 14) scale(0.72)">
+    <!-- top bar with left-pointing arrow tip -->
+    <polygon points="12,14 88,14 88,30 12,30" fill="url(#zentraFaviconGrad)" />
+    <polygon points="12,12 12,32 0,22" fill="url(#zentraFaviconGrad)" />
+
+    <!-- diagonal connector -->
+    <polygon points="88,30 72,30 12,70 28,70" fill="url(#zentraFaviconGrad)" />
+    <polygon points="80,30 76,30 16,70 20,70" fill="#FFFFFF" opacity="0.35" />
+
+    <!-- bottom bar with right-pointing arrow tip -->
+    <polygon points="12,70 88,70 88,86 12,86" fill="url(#zentraFaviconGrad)" />
+    <polygon points="88,68 88,88 100,78" fill="url(#zentraFaviconGrad)" />
+  </g>
+</svg>

@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Aurora Social color tokens — dark is the default/root palette (section 4 of the spec);
+   `.light` on <html> (toggled by ThemeContext) swaps every one of these at once, and every
+   component automatically repaints because they're all built on the same `bg-aurora-*` /
+   `text-aurora-*` / `border-aurora-*` utility names (see tailwind.config.js). Values are
+   space-separated RGB triplets, as Tailwind's `rgb(var(--x) / <alpha-value>)` pattern needs. */
+:root {
+  --aurora-bg: 11 16 32; /* #0B1020 */
+  --aurora-card: 20 26 46; /* #141A2E */
+  --aurora-border: 38 48 74; /* #26304A */
+  --aurora-text: 248 250 252; /* #F8FAFC */
+  --aurora-text-muted: 148 163 184; /* #94A3B8 */
+}
+
+:root.light {
+  --aurora-bg: 248 250 252; /* #F8FAFC */
+  --aurora-card: 255 255 255; /* #FFFFFF */
+  --aurora-border: 226 232 240; /* #E2E8F0 */
+  --aurora-text: 15 23 42; /* #0F172A */
+  --aurora-text-muted: 100 116 139; /* #64748B */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Height of the fixed mobile bottom nav (MobileNav.jsx), including its safe-area
+   padding. It is a real fixed-position overlay, so it sits ON TOP of page content
+   and does not push anything up by itself — any page that renders content all the
+   way down to the bottom edge has to reserve this much space for it, or that
+   content is simply hidden underneath the bar.
+
+   That was exactly the bug on every `fullBleed` page: the chat composer, the AI
+   chat composer and the bottom of a reel were all rendered *behind* the bottom nav
+   on a phone, so the typing bar looked like it had vanished entirely. Non-fullBleed
+   pages already handled this with a plain `pb-24`.
+
+   56px of bar + its bottom padding. Slightly generous on purpose so nothing ends up
+   flush against the bar. */
+:root {
+  --mobile-nav-h: calc(3.75rem + max(0.5rem, env(safe-area-inset-bottom)));
+}
+
+/* The app shell (MainLayout) owns scrolling itself via its own internal
+   overflow-y-auto regions, one per column. Fixing html/body/#root to the
+   viewport height stops the document itself from ALSO being scrollable —
+   that double scroll container (page + inner pane) was the source of the
+   page-scrolling glitches (double scrollbars, iOS rubber-band jumps, snap
+   scroll fighting the outer page on Reels). */
+html,
+body,
+#root {
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+
+body {
+  @apply bg-aurora-bg text-aurora-text;
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Visible keyboard focus everywhere — accessibility requirement (section 47) */
+:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+/* Safe-area helpers for fixed elements that sit at a screen edge on notched phones
+   (iPhone home indicator, punch-hole/gesture bars on Android) — see viewport-fit=cover
+   in index.html, which is required for these env() values to be non-zero. */
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+/* Clearance for the fixed bottom nav, used by full-height pages (see MainLayout).
+   Both collapse to 0 at `md`, where the bottom nav is replaced by the sidebar rail. */
+.pb-mobile-nav {
+  padding-bottom: var(--mobile-nav-h);
+}
+.pb-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@media (min-width: 768px) {
+  .pb-mobile-nav,
+  .pb-inset-bottom {
+    padding-bottom: 0;
+  }
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--aurora-border));
+  border-radius: 8px;
+}
+
+.aurora-gradient-text {
+  background-image: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
